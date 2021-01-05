@@ -95,6 +95,7 @@ client.on('guildMemberRemove', member => {
 });
 
 client.on('presenceUpdate', (oldUser, newUser) => {
+    if(!oldUser) checkOnlineCount(newUser.guild);
     if(oldUser.status != newUser.status){
         checkOnlineCount(newUser.guild);
     }
