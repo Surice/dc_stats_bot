@@ -1,0 +1,12 @@
+[Unit]
+Description=a dc bot who displays some server stats
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/discord/dc_stats
+ExecStart=/usr/bin/npm start
+Restart=on-failure
+User=pi
+
+[Install]
+WantedBy=multi-user.target
