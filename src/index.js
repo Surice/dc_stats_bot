@@ -13,11 +13,12 @@ const channelNames = ['🟢 Online: ', "👪 total Member: ", "🕒 mm:hh 📆 0
 
 
 var job = new cron('0 * * * * *', async function() {
-    for (e in settings){
-        let channel = await client.channels.fetch(settings[e][2]),
-        d = new Date(),
+    let d = new Date(),
         time = `${d.getHours()}:${d.getMinutes()}`,
         date = `${d.getDate()}/${d.getMonth() +1}/${d.getFullYear()}`;
+
+    for (e in settings){
+        let channel = await client.channels.fetch(settings[e][2]);
 
         channel.setName(`🕒 ${time} 📆 ${date}`);
     }
@@ -93,9 +94,12 @@ client.on('guildMemberRemove', member => {
 });
 
 client.on('presenceUpdate', (oldUser, newUser) => {
-    if(!oldUser) checkOnlineCount(newUser.guild);
-    if(oldUser.status != newUser.status){
+    if(!oldUser){
         checkOnlineCount(newUser.guild);
+    }else{
+        if(oldUser.status != newUser.status){
+            checkOnlineCount(newUser.guild);
+        }
     }
 });
 
