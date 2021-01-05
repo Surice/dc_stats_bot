@@ -11,19 +11,17 @@ const client = new Discord.Client({ partials: ['USER'] });
 const channelNames = ['🟢 Online: ', "👪 total Member: ", "🕒 mm:hh 📆 01.01.00"];
 
 
-
-var job = new cron('0 * * * * *', async function() {
+setInterval(() =>{
     let d = new Date(),
         time = `${d.getHours()}:${d.getMinutes()}`,
         date = `${d.getDate()}/${d.getMonth() +1}/${d.getFullYear()}`;
 
     for (e in settings){
-        let channel = await client.channels.fetch(settings[e][2]):
+        let channel = await client.channels.fetch(settings[e][2]);
 
         channel.setName(`🕒 ${time} 📆 ${date}`);
     }
-});
-job.start();
+  }, 1000);
 
 
 
