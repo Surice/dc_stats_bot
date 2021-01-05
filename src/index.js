@@ -1,6 +1,5 @@
 const fs = require('fs');
 const Discord = require('discord.js');
-const cron = require('cron').CronJob;
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, "utf-8").toString());
 
@@ -11,7 +10,7 @@ const client = new Discord.Client({ partials: ['USER'] });
 const channelNames = ['🟢 Online: ', "👪 total Member: ", "🕒 mm:hh 📆 01.01.00"];
 
 
-setInterval(() =>{
+setInterval(async () =>{
     let d = new Date(),
         time = `${d.getHours()}:${d.getMinutes()}`,
         date = `${d.getDate()}/${d.getMonth() +1}/${d.getFullYear()}`;
