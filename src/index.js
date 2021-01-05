@@ -40,18 +40,16 @@ client.on('message', msg => {
     if(msg.content[0] == "ping") msg.channel.send("pong");
 
     if(msg.content[0] == "test"){
-        msg.guild.members.cache.each(e => {
-            console.log(`${e.id}: ${e.user.presence.status}`);
-        });
+        msg.channel.send("no tests running!");
     }
 
-    if(msg.content[0] == "pos"){
-        let channel = client.channels.cache.get(msg.content[1]);
-
-        msg.channel.send(channel.position);
-    }
 
     if(msg.content[0] == "setup" && msg.content[1] == "channel"){
+        if(!msg.member.hasPermission('ADMINISTRATOR')){
+            msg.channel.send("unauthorized!");
+            return;
+        }
+
         console.log("running setup");
         let guild = msg.guild,
             count = 3;
