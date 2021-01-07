@@ -65,7 +65,7 @@ client.on('ready', ()=> {
 
     client.user.setActivity(`for Preifx: ${config.prefix}`, {type: "WATCHING"});
 
-    settings.forEach(async guildID => {
+    managedGuilds.forEach(async guildID => {
         let guild = await client.guilds.fetch(guildID);
         checkMemberCount(guild);
     });
