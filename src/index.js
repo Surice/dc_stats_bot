@@ -107,7 +107,7 @@ client.on('message', async msg => {
             count = 3;
 
         if(!managedGuilds.includes(guild.id)) managedGuilds.push(guild.id);
-        fs.writeFileSync(`${__dirname}/settings.json`, managedGuilds);
+        fs.writeFileSync(`${__dirname}/settings.json`, JSON.stringify(managedGuilds));
 
         msg.guild.channels.create('stats', {type: "category"}).then(async category => {
             channelNames.forEach(async item => {
