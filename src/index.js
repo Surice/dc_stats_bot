@@ -158,7 +158,7 @@ client.on('presenceUpdate', (oldUser, newUser) => {
 });
 
 async function checkMemberCount(guild){
-    let oldChannel = await guild.channels.cache.filter(channel => channel.name.startsWith(channelNames[1])),
+    let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('total Member:')),
         settings = {
             type: "voice",
             permissionOverwrites: [{
