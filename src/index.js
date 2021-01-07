@@ -22,6 +22,7 @@ let job = new Cron('0 * * * * *', async () => {
             channels = guild.channels.cache.filter(channel => channel.type == "voice"),
             settings = {
                 type: "voice",
+                position: 2,
                 permissionOverwrites: [{
                     id: guild.roles.everyone,
                     deny: ['CONNECT']
@@ -39,7 +40,7 @@ let job = new Cron('0 * * * * *', async () => {
                 if(result){
                     if(channel.parentID) settings.parent = channel.parentID;
 
-                    settings.position = channel.position;
+//                    settings.position = channel.position;
 
                     channel.delete();
                 }
@@ -150,9 +151,11 @@ client.on('guildMemberRemove', member => {
 client.on('presenceUpdate', (oldUser, newUser) => {
     if(!oldUser){
         checkOnlineCount(newUser.guild);
+        checkMemberCount(member.guild);
     }else{
         if(oldUser.status != newUser.status){
             checkOnlineCount(newUser.guild);
+            checkMemberCount(member.guild);
         }
     }
 });
@@ -161,6 +164,7 @@ async function checkMemberCount(guild){
     let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('total Member:')),
         settings = {
             type: "voice",
+            position: 1,
             permissionOverwrites: [{
                 id: guild.roles.everyone,
                 deny: ['CONNECT']
@@ -170,7 +174,7 @@ async function checkMemberCount(guild){
     oldChannel.each(async channel => {
         if(channel.parentID) settings.parent = channel.parentID;
 
-        settings.position = channel.position;
+//        settings.position = channel.position;
         let newChannel = await guild.channels.create(`${channelNames[1]} ${guild.memberCount}`, settings);
         console.log(`${settings.position} / ${newChannel.position}`);
 
@@ -181,6 +185,7 @@ async function checkOnlineCount(guild){
     let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('Online:')),
         settings = {
             type: "voice",
+            position: 1,
             permissionOverwrites: [{
                 id: guild.roles.everyone,
                 deny: ['CONNECT']
@@ -192,7 +197,7 @@ async function checkOnlineCount(guild){
         
         if(channel.parentID) settings.parent = channel.parentID;
 
-        settings.position = channel.position;
+//        settings.position = channel.position;
         let newChannel = await guild.channels.create(`${channelNames[0]} ${onlineMembersCount}`, settings);
         console.log(`${settings.position} / ${newChannel.position}`);
         channel.delete();
