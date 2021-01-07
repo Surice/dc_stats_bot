@@ -8,7 +8,7 @@ const client = new Discord.Client({ partials: ['USER', 'CHANNEL'] });
 
 const channelNames = ['🟢 Online: ', "👪 total Member: ", "🕒 mm:hh 📆 01.01.00"];
 
-let managedGuilds = JSON.parse(fs.readFileSync(`${__dirname}/settings.json`, "utf-8"));
+let managedGuilds = JSON.parse(fs.readFileSync(`${__dirname}/settings.json`, "utf-8").toString());
 
 
 let job = new Cron('0 * * * * *', async () => {
