@@ -172,7 +172,7 @@ async function checkMemberCount(guild){
     });
 }
 async function checkOnlineCount(guild){
-    let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('Online: ')),
+    let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('Online:')),
         settings = {
             type: "voice",
             permissionOverwrites: [{
