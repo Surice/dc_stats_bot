@@ -82,7 +82,6 @@ client.on('message', async msg => {
         }
 
         managedGuilds.forEach(async guildID => {
-            if(guildID != '293403456646021120') return;
             let guild = await client.guilds.fetch(guildID),
                 channelTitle = ["Online: ", "total Member"];
 
