@@ -106,12 +106,12 @@ client.on('message', async msg => {
         let guild = msg.guild,
             count = 3;
 
-        managedGuilds.push(guild.id);
+        if(!managedGuilds.includes(guild.id)) managedGuilds.push(guild.id);
         fs.writeFileSync(`${__dirname}/settings.json`, managedGuilds);
 
         msg.guild.channels.create('stats', {type: "category"}).then(async category => {
             channelNames.forEach(async item => {
-                let channel = await guild.channels.create(item, {
+                await guild.channels.create(item, {
                     type: "voice",
                     parent: category.id,
                     permissionOverwrites: [{
@@ -119,13 +119,14 @@ client.on('message', async msg => {
                         deny: ['CONNECT']
 
                     }]
-                });
-                count--
+                }).then(c => {
+                    count--
 
-                if(count <= 0){
-                    checkOnlineCount(guild);
-                    checkMemberCount(guild);
-                }
+                    if(count <= 0){
+                        checkOnlineCount(guild);
+                        checkMemberCount(guild);
+                    }
+                });
             });
         });
     }
