@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const Cron = require('cron').CronJob;
+const { settings } = require('cluster');
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, "utf-8").toString());
 
@@ -63,6 +64,11 @@ client.on('ready', ()=> {
     console.log("Client startet Successfully as "+ client.user.tag);
 
     client.user.setActivity(`for Preifx: ${config.prefix}`, {type: "WATCHING"});
+
+    settings.forEach(async guildID => {
+        let guild = await client.guilds.fetch(guildID);
+        checkMemberCount(guild);
+    });
 });
 
 
