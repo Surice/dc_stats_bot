@@ -151,11 +151,11 @@ client.on('guildMemberRemove', member => {
 client.on('presenceUpdate', (oldUser, newUser) => {
     if(!oldUser){
         checkOnlineCount(newUser.guild);
-        checkMemberCount(member.guild);
+        checkMemberCount(newUser.guild);
     }else{
         if(oldUser.status != newUser.status){
             checkOnlineCount(newUser.guild);
-            checkMemberCount(member.guild);
+            checkMemberCount(newUser.guild);
         }
     }
 });
