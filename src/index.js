@@ -1,7 +1,6 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const Cron = require('cron').CronJob;
-const { settings } = require('cluster');
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, "utf-8").toString());
 
@@ -173,7 +172,7 @@ async function checkMemberCount(guild){
     });
 }
 async function checkOnlineCount(guild){
-    let oldChannel = await guild.channels.cache.filter(channel => channel.name.startsWith(channelNames[0])),
+    let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('Online: ')),
         settings = {
             type: "voice",
             permissionOverwrites: [{
