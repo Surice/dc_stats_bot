@@ -93,9 +93,14 @@ client.on('message', async msg => {
                 channelTitle = ["Online: ", "total Member"];
 
             await channelTitle.forEach(name => {
-                let channels = guild.channels.cache.filter(channel => channel.name.includes(name));
+                let channels = guild.channels.cache.filter(channel => channel.name.includes(name)),
+                    trigger = false;
 
                 channels.each(channel => {
+                    if(!trigger){
+                        trigger = true;
+                        return;
+                    }
                     channel.delete();
                 });
             });
