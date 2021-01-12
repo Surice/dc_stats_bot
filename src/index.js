@@ -167,6 +167,7 @@ client.on('presenceUpdate', (oldUser, newUser) => {
 
 async function checkMemberCount(guild){
     let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('total Member:')),
+    trigger = false,
         settings = {
             type: "voice",
             position: 1,
@@ -178,16 +179,19 @@ async function checkMemberCount(guild){
 
     oldChannel.each(async channel => {
         if(channel.parentID) settings.parent = channel.parentID;
-
-//        settings.position = channel.position;
-        let newChannel = await guild.channels.create(`${channelNames[1]} ${guild.memberCount}`, settings);
-        console.log(`${settings.position} / ${newChannel.position}`);
+        settings.position = channel.position;
 
         channel.delete();
+
+        if(trigger) return;
+        trigger = true;
+
+        guild.channels.create(`${channelNames[1]} ${guild.memberCount}`, settings);        
     });
 }
 async function checkOnlineCount(guild){
     let oldChannel = await guild.channels.cache.filter(channel => channel.name.includes('Online:')),
+        trigger = false,
         settings = {
             type: "voice",
             position: 1,
@@ -198,14 +202,17 @@ async function checkOnlineCount(guild){
         };
 
     oldChannel.each(async channel => {
-        let onlineMembersCount = guild.members.cache.filter(member => member.presence.status != "offline").size;
-        
         if(channel.parentID) settings.parent = channel.parentID;
+        settings.position = channel.position;
 
-//        settings.position = channel.position;
-        let newChannel = await guild.channels.create(`${channelNames[0]} ${onlineMembersCount}`, settings);
-        console.log(`${settings.position} / ${newChannel.position}`);
         channel.delete();
+
+        if(trigger) return;
+        trigger = true;
+
+        let onlineMembersCount = guild.members.cache.filter(member => member.presence.status != "offline").size;
+
+        guild.channels.create(`${channelNames[0]} ${onlineMembersCount}`, settings);
     });
 }
 
