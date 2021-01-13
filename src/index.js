@@ -179,7 +179,7 @@ async function checkMemberCount(guild){
 
     oldChannel.each(async channel => {
         if(channel.parentID) settings.parent = channel.parentID;
-        settings.position = channel.position;
+//        settings.position = channel.position;
 
         channel.delete();
 
@@ -203,7 +203,7 @@ async function checkOnlineCount(guild){
 
     oldChannel.each(async channel => {
         if(channel.parentID) settings.parent = channel.parentID;
-        settings.position = channel.position;
+//        settings.position = channel.position;
 
         channel.delete();
 
