@@ -1,13 +1,12 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const Cron = require('cron').CronJob;
-const { settings } = require('cluster');
 
 const config = JSON.parse(fs.readFileSync(`${__dirname}/config.json`, "utf-8").toString());
 
 const client = new Discord.Client({ partials: ['USER', 'CHANNEL'] });
 
-const channelNames = ['🟢 Online: ', "👪 total Member: ", "🕒 mm:hh 📆 01.01.00"];
+const channelNames = ['🟢 Online: ', "👪 total Member: ", "🕒 MM:HH 📆 DD/MM/YYYY"];
 
 let managedGuilds = JSON.parse(fs.readFileSync(`${__dirname}/settings.json`, "utf-8").toString());
 
@@ -20,6 +19,7 @@ let job = new Cron('0 * * * * *', async () => {
     managedGuilds.forEach(async e => {
         let guild = await client.guilds.fetch(e),
             channels = guild.channels.cache.filter(channel => channel.type == "voice"),
+            trigger = false,
             settings = {
                 type: "voice",
                 position: 2,
@@ -32,22 +32,23 @@ let job = new Cron('0 * * * * *', async () => {
         channels.forEach(channel => {
             let channelName = channel.name.split(' ');
             try{
-                let time = channelName[1].split(':'),
-                    date = channelName[3].split('/');
+                let checkTime = channelName[1].split(':'),
+                    checkDate = channelName[3].split('/');
 
-                let result = parseFloat(time[0] + time[1] + date[0] + date [1] + date[2]);
+                let result = parseFloat(checkTime[0] + checkTime[1] + checkDate[0] + checkDate [1] + checkDate[2]);
 
                 if(result){
                     if(channel.parentID) settings.parent = channel.parentID;
-
-//                    settings.position = channel.position;
-
+                    //                    settings.position = channel.position;
                     channel.delete();
+
+                    if(trigger) return;
+                    trigger = true;
+
+                    guild.channels.create(`🕒 ${time} 📆 ${date}`, settings);
                 }
             }catch(err){}
         });
-
-        guild.channels.create(`🕒 ${time} 📆 ${date}`, settings);
     });
 });
 job.start();
@@ -123,6 +124,13 @@ client.on('message', async msg => {
 
         msg.guild.channels.create('stats', {type: "category"}).then(async category => {
             channelNames.forEach(async item => {
+                if(item == channelNames[2]){
+                    let d = new Date(),
+                        time = `${convertTime(d.getHours())}:${convertTime(d.getMinutes())}`,
+                        date = `${d.getDate()}/${d.getMonth() +1}/${d.getFullYear()}`;
+                    item = `🕒 ${time} 📆 ${date}`;
+                }
+
                 await guild.channels.create(item, {
                     type: "voice",
                     parent: category.id,
@@ -132,7 +140,7 @@ client.on('message', async msg => {
 
                     }]
                 }).then(c => {
-                    count--
+                    count-- 
 
                     if(count <= 0){
                         checkOnlineCount(guild);
